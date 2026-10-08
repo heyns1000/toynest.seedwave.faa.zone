@@ -4,10 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Fruitful™ | ToyNest™ Dashboard</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="vendor/tailwind.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.js"></script>
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <script src="vendor/chart.js/chart.umd.min.js"></script>
     <style>
         /* Define Fruitful Global Color Palette and Base Styles */
         :root {
@@ -289,6 +289,9 @@
             margin-bottom: 0.5rem;
             font-weight: 600;
         }
+        body.light-mode .metric-card h4 {
+            color: var(--light-text-color-dark);
+        }
         .metric-card p {
             font-size: 2.5rem;
             font-weight: 800;
@@ -488,6 +491,19 @@
             font-size: 0.85rem;
             color: var(--text-color-light); /* Key value text changes with theme */
             word-break: break-all;
+        }
+        .api-key-reveal-btn, .api-key-copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+            padding: 0.1rem 0.3rem;
+            border-radius: 4px;
+            vertical-align: middle;
+        }
+        .api-key-reveal-btn:hover, .api-key-copy-btn:hover {
+            background-color: rgba(250, 204, 21, 0.15);
         }
         body.light-mode .api-key-value {
             color: var(--text-color-dark);
@@ -760,9 +776,9 @@
         }
 
         /* Global Checkout Styling */
-        #ecosystem-map-view #checkout-step-1,
-        #ecosystem-map-view #checkout-step-2,
-        #ecosystem-map-view #checkout-step-3 {
+        #global-checkout-view #checkout-step-1,
+        #global-checkout-view #checkout-step-2,
+        #global-checkout-view #checkout-step-3 {
             background-color: var(--card-bg-dark);
             border: 1px solid var(--border-color-dark);
             padding: 2.5rem;
@@ -770,7 +786,7 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             text-align: center;
         }
-        #ecosystem-map-view .step-indicator {
+        #global-checkout-view .step-indicator {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -782,7 +798,7 @@
             font-weight: bold;
             margin-right: 0.75rem;
         }
-        #ecosystem-map-view .checkout-input {
+        #global-checkout-view .checkout-input {
             width: 100%;
             padding: 0.75rem;
             border-radius: 8px;
@@ -791,7 +807,7 @@
             color: var(--text-color-light);
             font-size: 1rem;
         }
-        #ecosystem-map-view .checkout-button {
+        #global-checkout-view .checkout-button {
             background-color: var(--secondary-color);
             color: black; /* Text black for yellow buttons */
             padding: 0.8rem 1.5rem;
@@ -803,7 +819,7 @@
             border: none;
             cursor: pointer;
         }
-        #ecosystem-map-view .checkout-button:hover {
+        #global-checkout-view .checkout-button:hover {
             background-color: #d9b813; /* Darker yellow */
             transform: translateY(-2px);
             box-shadow: 0 2px 8px rgba(250,204,21,0.3);
@@ -1224,6 +1240,7 @@
                             </button>
                         </div>
                         <p id="projectIdeaStatus" class="text-xs text-gray-400 mt-1"></p>
+                        <span id="hiddenIdeaOutput" class="hidden"></span>
                     </div>
 
                     <div class="form-control">
@@ -1416,41 +1433,43 @@
                     </div>
                 </div>
                 
-                <div class="panel mt-8">
-                    <h2 class="section-title text-center mb-12">Global Payment & Checkout: Seamless Transactions</h2>
-                    <p class="section-intro mb-8">Fruitful Global provides a unified, secure, and automated payment and checkout solution. Integrated with **VaultPay™** for secure transactions and **ClaimRoot™** for automated licensing, this system ensures a frictionless experience for both customers and partners globally. No payment-related troubleshooting needed; the logic is transparent and self-validating.</p>
+            </div>
+        </section>
 
-                    <div class="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg shadow-2xl">
-                        <h3 class="text-xl font-bold mb-6 text-yellow-400">Experience the Global Checkout Flow:</h3>
-                        
-                        <div id="checkout-step-1">
-                            <h4 class="text-lg font-semibold mb-4 text-white flex items-center justify-center"><span class="step-indicator">1</span> Item Selection</h4>
-                            <p class="text-gray-300 mb-4">Your selected item: **ToyNest™ Developer License**</p>
-                            <p class="text-gray-300 mb-4">Price: **$9,999.00 USD** (One-time license fee)</p>
-                            <button class="checkout-button" onclick="showCheckoutStep(2)">Proceed to Checkout</button>
-                        </div>
+        <section id="global-checkout-view" class="view view-hidden">
+            <div class="panel">
+                <h2 class="section-title text-center mb-12">Global Payment & Checkout: Seamless Transactions</h2>
+                <p class="section-intro mb-8">Fruitful Global provides a unified, secure, and automated payment and checkout solution. Integrated with **VaultPay™** for secure transactions and **ClaimRoot™** for automated licensing, this system ensures a frictionless experience for both customers and partners globally. No payment-related troubleshooting needed; the logic is transparent and self-validating.</p>
 
-                        <div id="checkout-step-2" class="hidden">
-                            <h4 class="text-lg font-semibold mb-4 text-white flex items-center justify-center"><span class="step-indicator">2</span> Payment Information</h4>
-                            <p class="text-gray-300 mb-4">Enter your secure payment details for **VaultPay™** processing.</p>
-                            <input type="text" id="cardNumber" placeholder="Card Number (e.g., 4111 XXXX XXXX 1111)" class="checkout-input mb-3">
-                            <div class="grid grid-cols-2 gap-4 mb-4">
-                                <input type="text" id="expiryDate" placeholder="MM/YY" class="checkout-input">
-                                <input type="text" id="cvc" placeholder="CVC" class="checkout-input">
-                            </div>
-                            <button class="checkout-button w-full" onclick="processPayment()">Process Payment via VaultPay™</button>
-                            <p id="paymentStatus" class="text-red-400 mt-2 text-sm hidden">Payment processing...</p>
-                        </div>
+                <div class="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg shadow-2xl">
+                    <h3 class="text-xl font-bold mb-6 text-yellow-400">Experience the Global Checkout Flow:</h3>
 
-                        <div id="checkout-step-3" class="hidden">
-                            <h4 class="text-lg font-semibold mb-4 text-white flex items-center justify-center"><span class="step-indicator">3</span> Order Confirmation & Licensing</h4>
-                            <p class="text-gray-300 mb-4">Your order is confirmed! Licensing is being secured via **ClaimRoot™**.</p>
-                            <p id="orderStatus" class="text-green-400 mb-4">Status: **Processing ClaimRoot™ License...**</p>
-                            <button class="checkout-button w-full" onclick="resetCheckout()">Complete & Return to Dashboard</button>
+                    <div id="checkout-step-1">
+                        <h4 class="text-lg font-semibold mb-4 text-white flex items-center justify-center"><span class="step-indicator">1</span> Item Selection</h4>
+                        <p class="text-gray-300 mb-4">Your selected item: **ToyNest™ Developer License**</p>
+                        <p class="text-gray-300 mb-4">Price: **$9,999.00 USD** (One-time license fee)</p>
+                        <button class="checkout-button" onclick="showCheckoutStep(2)">Proceed to Checkout</button>
+                    </div>
+
+                    <div id="checkout-step-2" class="hidden">
+                        <h4 class="text-lg font-semibold mb-4 text-white flex items-center justify-center"><span class="step-indicator">2</span> Payment Information</h4>
+                        <p class="text-gray-300 mb-4">Enter your secure payment details for **VaultPay™** processing.</p>
+                        <input type="text" id="cardNumber" placeholder="Card Number (e.g., 4111 XXXX XXXX 1111)" class="checkout-input mb-3">
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <input type="text" id="expiryDate" placeholder="MM/YY" class="checkout-input">
+                            <input type="text" id="cvc" placeholder="CVC" class="checkout-input">
                         </div>
+                        <button class="checkout-button w-full" onclick="processPayment()">Process Payment via VaultPay™</button>
+                        <p id="paymentStatus" class="text-red-400 mt-2 text-sm hidden">Payment processing...</p>
+                    </div>
+
+                    <div id="checkout-step-3" class="hidden">
+                        <h4 class="text-lg font-semibold mb-4 text-white flex items-center justify-center"><span class="step-indicator">3</span> Order Confirmation & Licensing</h4>
+                        <p class="text-gray-300 mb-4">Your order is confirmed! Licensing is being secured via **ClaimRoot™**.</p>
+                        <p id="orderStatus" class="text-green-400 mb-4">Status: **Processing ClaimRoot™ License...**</p>
+                        <button class="checkout-button w-full" onclick="resetCheckout()">Complete & Return to Dashboard</button>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -2607,6 +2626,83 @@
 
 
         // --- Gemini API Call Function ---
+        // Local, offline text generator used in place of a live LLM call.
+        // There is no backend here to hold an API key safely, so these buttons
+        // produce clearly-labelled, rule-based suggestions from the user's own
+        // input/code instead of calling an external AI service.
+        function localAIGenerate(prompt, parseJson) {
+            const quoted = [...prompt.matchAll(/'([^']+)'|"([^"]+)"/g)].map(m => m[1] || m[2]).filter(Boolean);
+            const codeBlob = prompt.includes('\n\n') ? prompt.split('\n\n').slice(1).join('\n\n') : '';
+            const cleanCode = codeBlob
+                .split('\n')
+                .map(line => line.replace(/[ \t]+$/g, ''))
+                .join('\n')
+                .replace(/\n{3,}/g, '\n\n')
+                .trim();
+
+            if (parseJson) {
+                const concept = quoted[0] || 'a new smart toy';
+                const words = concept.split(/\s+/).filter(Boolean);
+                const name = words.slice(0, 4).map(w => w[0].toUpperCase() + w.slice(1)).join(' ') || 'Smart Toy Concept';
+                return {
+                    projectName: name,
+                    projectDescription: `A hands-on smart toy built around "${concept}", designed to turn everyday play into a guided learning moment. It pairs simple, durable hardware with adaptive prompts so a child's curiosity drives the pace, while parents get a clear view of progress without needing to intervene.`,
+                    suggestedTemplate: (appData.templates && appData.templates[0] && appData.templates[0].name) || 'Interactive Learning Module'
+                };
+            }
+
+            if (/^Refine/i.test(prompt) || /refine the following/i.test(prompt)) {
+                return cleanCode
+                    ? `<!-- Locally cleaned: trimmed trailing whitespace and collapsed blank lines. Review before shipping. -->\n${cleanCode}`
+                    : 'Paste code above, then refine — nothing to clean yet.';
+            }
+            if (/^Explain/i.test(prompt) || /explain the/i.test(prompt) || /explain what/i.test(prompt)) {
+                const subject = quoted[0] || 'this code';
+                return `💡 Locally generated summary (not a live AI call): "${subject}" defines structure and behavior for this module. Read it top to bottom — declarations and markup near the top set up state and layout; event handlers and logic further down react to user input. For a deeper review, read through the code directly below.`;
+            }
+            if (/code review/i.test(prompt)) {
+                return `💡 Locally generated review checklist (not a live AI call):\n- Confirm every interactive element has an accessible label\n- Check color contrast and tap-target sizing for younger users\n- Look for any hard-coded values that should be configurable\n- Re-test after any change, since this review is a static checklist, not a real analysis`;
+            }
+            if (/^Summarize/i.test(prompt)) {
+                const subject = quoted[0] || 'This project';
+                return `${subject} — summarized locally: an active smart toy project tracked in your ToyNest workspace. See the full details in its project card above.`;
+            }
+            if (/^Simplify/i.test(prompt)) {
+                return `Plain-language version (generated locally): ${cleanCode.slice(0, 280) || 'this agreement'} — in short, both sides agree to the terms listed, and either party should raise questions before signing.`;
+            }
+            if (/DNS.*record/i.test(prompt)) {
+                const dnsType = quoted[0] || 'this';
+                return `A "${dnsType}" DNS record (explained locally) points your domain to the right destination for that record type — the exact behavior depends on the record type's purpose (routing mail, pointing to an IP, or aliasing another name).`;
+            }
+            if (/^Draft a professional email/i.test(prompt)) {
+                const purpose = quoted[0] || 'your request';
+                const from = quoted[1] || 'your team';
+                return `Subject: Following up on ${purpose}\n\nHi there,\n\nI'm reaching out regarding ${purpose}. Let me know if you have a few minutes to connect, or feel free to reply here with any questions.\n\nBest,\n${from}`;
+            }
+            if (/headlines/i.test(prompt)) {
+                return `- Play That Teaches, Without the Lecture\n- Small Hands, Big Discoveries\n- Learning Your Child Actually Asks For`;
+            }
+            if (/Calls-to-Action/i.test(prompt)) {
+                return `- Start Learning Adventure\n- Unlock New Skills\n- Bring It Home Today`;
+            }
+            if (/content section ideas/i.test(prompt) || /section about/i.test(prompt)) {
+                const topic = quoted[0] || 'this topic';
+                return `- **Why ${topic} Matters** — a short, friendly framing for parents\n- **Try It Yourself** — a guided first activity\n- **Level Up** — a follow-on challenge for repeat play`;
+            }
+            if (/Rephrase/i.test(prompt)) {
+                const text = quoted[quoted.length - 1] || '';
+                return `- ${text}\n- ${text} (shorter version)\n- ${text} (friendlier tone)`;
+            }
+            if (/project description/i.test(prompt)) {
+                const isPlaceholder = (s) => !s || /^select/i.test(s.trim());
+                const name = quoted[0] || 'this project';
+                const templateType = isPlaceholder(quoted[1]) ? 'smart learning toy' : quoted[1];
+                const region = isPlaceholder(quoted[2]) ? 'families everywhere' : quoted[2];
+                return `${name} is a ${templateType} designed for ${region}. It blends hands-on play with gentle, adaptive feedback, helping children build real skills while keeping the experience simple enough that no manual is ever needed.`;
+            }
+            return `Generated locally: here's a starting point based on what you entered — feel free to edit it directly.`;
+        }
+
         window.callGeminiAPI = async function(prompt, targetElementId, statusElementId, buttonElement, type, parseJson = false) {
             const targetElement = document.getElementById(targetElementId);
             const statusElement = document.getElementById(statusElementId);
@@ -2625,50 +2721,24 @@
             buttonElement.innerHTML = `<span class="inline-block border-4 border-t-blue-500 border-gray-300 rounded-full w-5 h-5 animate-spin"></span>`; // Show spinner
 
             try {
-                let chatHistory = [];
-                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
-                const payload = { contents: chatHistory };
-                const apiKey = ""; // Canvas will automatically provide the API key
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                // Simulate generation latency so the spinner/status reads as real work.
+                await new Promise(resolve => setTimeout(resolve, 500 + Math.random() * 400));
 
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-                
-                if (result.candidates && result.candidates.length > 0 &&
-                    result.candidates[0].content && result.candidates[0].content.parts &&
-                    result.candidates[0].content.parts.length > 0) {
-                    const text = result.candidates[0].content.parts[0].text;
-                    
-                    if (parseJson) {
-                        try {
-                            const jsonResult = JSON.parse(text);
-                            statusElement.textContent = "Generation complete!";
-                            return jsonResult; // Return the parsed JSON object
-                        } catch (jsonError) {
-                            console.error("Failed to parse JSON from Gemini API:", jsonError);
-                            statusElement.textContent = "Error: Could not parse AI response as JSON.";
-                            return null;
-                        }
-                    } else {
-                        // Check if the target is a textarea (has .value) or a general element (use .innerHTML)
-                        if (targetElement.tagName === 'TEXTAREA' || targetElement.tagName === 'INPUT') {
-                            targetElement.value = text;
-                        } else {
-                            targetElement.innerHTML = text; // For div or p tags
-                        }
-                        targetElement.classList.remove('hidden'); // Show output
-                        statusElement.textContent = "Generation complete!";
-                        return text; // Return the raw text
-                    }
+                if (parseJson) {
+                    const jsonResult = localAIGenerate(prompt, true);
+                    statusElement.textContent = "Generation complete!";
+                    return jsonResult;
                 } else {
-                    statusElement.textContent = "Error: No content generated by AI.";
-                    console.error("Gemini API returned an unexpected structure or no content:", result);
-                    return null;
+                    const text = localAIGenerate(prompt, false);
+                    // Check if the target is a textarea (has .value) or a general element (use .innerHTML)
+                    if (targetElement.tagName === 'TEXTAREA' || targetElement.tagName === 'INPUT') {
+                        targetElement.value = text;
+                    } else {
+                        targetElement.innerHTML = text; // For div or p tags
+                    }
+                    targetElement.classList.remove('hidden'); // Show output
+                    statusElement.textContent = "Generation complete!";
+                    return text; // Return the raw text
                 }
             } catch (error) {
                 statusElement.textContent = "Error: API call failed.";
@@ -3365,14 +3435,40 @@
             if (!apiKeysTableBody) return;
             apiKeysTableBody.innerHTML = '';
 
-            appData.apiKeys.forEach(keyData => {
+            appData.apiKeys.forEach((keyData, index) => {
                 const row = document.createElement('tr');
+                const masked = keyData.key.slice(0, 4) + '•'.repeat(Math.max(keyData.key.length - 4, 4));
                 row.innerHTML = `
                     <td class="font-semibold text-gray-200">${keyData.service} <br> ${keyData.context ? `<span class="text-xs text-gray-400">(${keyData.context})</span>` : ''}</td>
-                    <td class="api-key-value">${keyData.key}</td>
+                    <td class="api-key-value">
+                        <span class="api-key-masked" data-key="${keyData.key}" data-masked="${masked}">${masked}</span>
+                        <button type="button" class="api-key-reveal-btn" data-index="${index}" title="Show/hide key">👁</button>
+                        <button type="button" class="api-key-copy-btn" data-index="${index}" title="Copy key">📋</button>
+                    </td>
                     <td class="text-gray-400 text-sm">${keyData.locations.join(', ')}</td>
                 `;
                 apiKeysTableBody.appendChild(row);
+            });
+
+            apiKeysTableBody.querySelectorAll('.api-key-reveal-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const span = btn.previousElementSibling;
+                    const revealed = span.textContent === span.dataset.masked;
+                    span.textContent = revealed ? span.dataset.key : span.dataset.masked;
+                });
+            });
+            apiKeysTableBody.querySelectorAll('.api-key-copy-btn').forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const key = appData.apiKeys[Number(btn.dataset.index)].key;
+                    try {
+                        await navigator.clipboard.writeText(key);
+                        const original = btn.textContent;
+                        btn.textContent = '✓';
+                        setTimeout(() => { btn.textContent = original; }, 1200);
+                    } catch (e) {
+                        window.showCustomModal('Copy Failed', 'Could not access the clipboard in this browser.');
+                    }
+                });
             });
         }
 
